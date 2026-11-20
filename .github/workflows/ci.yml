@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Build & verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Rebuild the browser bundle
+        run: node scripts/build.mjs
+
+      - name: Fail if client.js is stale
+        run: |
+          if ! git diff --exit-code -- client.js; then
+            echo "::error file=client.js::client.js is out of date. Run 'node scripts/build.mjs' and commit the result."
+            exit 1
+          fi
+
+      - name: Run contract checks
+        run: node scripts/check.mjs
+
+      - name: Validate metadata and docs
+        run: |
+          node --input-type=module -e "
+            import { readFileSync, existsSync } from 'node:fs';
+            const locales = ['locale/zh.json', 'locale/en.json'];
+            for (const f of ['package.json', ...locales]) JSON.parse(readFileSync(f, 'utf8'));
+            for (const f of locales) {
+              const meta = JSON.parse(readFileSync(f, 'utf8')).meta;
+              for (const key of ['title', 'description', 'detail']) {
+                if (!meta[key]) { console.error(f + ': missing meta.' + key); process.exit(1); }
+              }
+              if (!existsSync(meta.detail)) { console.error(f + ': meta.detail points at missing ' + meta.detail); process.exit(1); }
+            }
+            console.log('metadata ok');
+          "

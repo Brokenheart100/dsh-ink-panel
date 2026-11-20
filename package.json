@@ -5,6 +5,14 @@
   "description": "Ink-panel comic theme for DeepSeek Harness: ink outlines, hard offset shadows and halftone paper in a day (ricepaper) and night (ink) palette.",
   "type": "module",
   "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "verify": "npm run build && npm run check"
+  },
   "exports": {
     ".": "./index.js",
     "./client": "./client.js",
