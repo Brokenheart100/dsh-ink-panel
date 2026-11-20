@@ -44,5 +44,16 @@ const source = readFileSync(new URL('index.template.js', clientUrl), 'utf8')
 
 if (source.includes('__THEME_CSS__') || source.includes('__CLIENT_CODE__')) throw new Error('marker left in output')
 
-writeFileSync(new URL('client.js', root), banner + source)
-console.log('client.js written (' + (banner.length + source.length) + ' bytes) from ' + styles.length + ' stylesheets and ' + modules.length + ' modules')
+const output = banner + source
+const target = new URL('client.js', root)
+
+if (process.argv.includes('--check')) {
+  if (readFileSync(target, 'utf8') !== output) {
+    console.error('client.js is out of date. Run `node scripts/build.mjs` and commit the result.')
+    process.exit(1)
+  }
+  console.log('client.js is up to date (' + output.length + ' chars)')
+} else {
+  writeFileSync(target, output)
+  console.log('client.js written (' + output.length + ' bytes) from ' + styles.length + ' stylesheets and ' + modules.length + ' modules')
+}

@@ -999,306 +999,306 @@ window.__ModuleLoader__.load({
     ].join('')
 
 
-    /* ---- src/client/00-state.js ---- */
+/* ---- src/client/00-state.js ---- */
 
-    /*
-     * State: one persisted enabled flag, one persisted paper mode ('auto' | 'day' |
-     * 'night'), and the DOM painting that both controls drive.
-     */
+/*
+ * State: one persisted enabled flag, one persisted paper mode ('auto' | 'day' |
+ * 'night'), and the DOM painting that both controls drive.
+ */
 
-    const NAMESPACE = 'ink-panel'
-    const STORAGE_KEY = 'dsh.ink-panel.enabled'
-    const MODE_KEY = 'dsh.ink-panel.mode'
-    const ATTRIBUTE = 'data-dsh-ink'
-    const THEME_ATTRIBUTE = 'data-dsh-ink-theme'
-    const DARK_BODY_ATTRIBUTE = 'data-ds-dark-theme'
-    const MODES = ['auto', 'day', 'night']
+const NAMESPACE = 'ink-panel'
+const STORAGE_KEY = 'dsh.ink-panel.enabled'
+const MODE_KEY = 'dsh.ink-panel.mode'
+const ATTRIBUTE = 'data-dsh-ink'
+const THEME_ATTRIBUTE = 'data-dsh-ink-theme'
+const DARK_BODY_ATTRIBUTE = 'data-ds-dark-theme'
+const MODES = ['auto', 'day', 'night']
 
-    const listeners = new Set()
-    let enabled = true
-    let mode = 'auto'
-    let appDark = false
-    let paper = 'day'
+const listeners = new Set()
+let enabled = true
+let mode = 'auto'
+let appDark = false
+let paper = 'day'
 
-    const readStored = () => {
-      try {
-        return window.localStorage.getItem(STORAGE_KEY) !== 'off'
-      } catch {
-        return true
-      }
+const readStored = () => {
+  try {
+    return window.localStorage.getItem(STORAGE_KEY) !== 'off'
+  } catch {
+    return true
+  }
+}
+
+const readMode = () => {
+  try {
+    const stored = window.localStorage.getItem(MODE_KEY)
+    return MODES.indexOf(stored) >= 0 ? stored : 'auto'
+  } catch {
+    return 'auto'
+  }
+}
+
+const prefersDark = () => {
+  const query = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)')
+  return !!(query && query.matches)
+}
+
+/* The app declares its appearance on <body data-ds-dark-theme>; the media query
+   is only a fallback for the first paint, before the app has stamped it. */
+const detectAppDark = () => {
+  const body = document.body
+  if (body && typeof body.hasAttribute === 'function' && body.hasAttribute(DARK_BODY_ATTRIBUTE)) return true
+  return prefersDark()
+}
+
+const paint = () => {
+  const root = document.documentElement
+  paper = mode === 'night' || (mode === 'auto' && appDark) ? 'night' : 'day'
+  if (enabled) {
+    root.setAttribute(ATTRIBUTE, 'on')
+    root.setAttribute(THEME_ATTRIBUTE, paper)
+  } else {
+    root.removeAttribute(ATTRIBUTE)
+    root.removeAttribute(THEME_ATTRIBUTE)
+  }
+  /* The desktop shell samples body style mutations for the native caption
+     probe; touching it makes an instant toggle reach the title bar too. */
+  if (document.body) document.body.style.setProperty('--dsh-ink-panel', enabled ? '1' : '0')
+}
+
+const persist = (key, value) => {
+  try {
+    window.localStorage.setItem(key, value)
+  } catch {
+    /* private mode: the choice still holds for this page */
+  }
+}
+
+const emit = () => {
+  for (const listener of listeners) {
+    try {
+      listener()
+    } catch {
+      /* one broken subscriber must not block the others */
     }
+  }
+}
 
-    const readMode = () => {
-      try {
-        const stored = window.localStorage.getItem(MODE_KEY)
-        return MODES.indexOf(stored) >= 0 ? stored : 'auto'
-      } catch {
-        return 'auto'
-      }
+const setSkin = (next, save) => {
+  if (enabled === next) return
+  enabled = next
+  if (save) persist(STORAGE_KEY, next ? 'on' : 'off')
+  paint()
+  emit()
+}
+
+const setMode = (next) => {
+  if (MODES.indexOf(next) < 0 || mode === next) return
+  mode = next
+  persist(MODE_KEY, next)
+  paint()
+  emit()
+}
+
+const setAppDark = (next) => {
+  if (next === appDark) return
+  appDark = next
+  paint()
+  emit()
+}
+
+/* Both controls read the same store; the tuple identity keeps re-renders cheap. */
+const useInkState = () => {
+  const [value, setValue] = React.useState([enabled, mode, paper])
+  React.useEffect(() => {
+    const sync = () => setValue([enabled, mode, paper])
+    listeners.add(sync)
+    sync()
+    return () => {
+      listeners.delete(sync)
     }
+  }, [])
+  return { enabled: value[0], mode: value[1], paper: value[2] }
+}
 
-    const prefersDark = () => {
-      const query = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)')
-      return !!(query && query.matches)
-    }
+/* ---- src/client/10-copy.js ---- */
 
-    /* The app declares its appearance on <body data-ds-dark-theme>; the media query
-       is only a fallback for the first paint, before the app has stamped it. */
-    const detectAppDark = () => {
-      const body = document.body
-      if (body && typeof body.hasAttribute === 'function' && body.hasAttribute(DARK_BODY_ATTRIBUTE)) return true
-      return prefersDark()
-    }
+/*
+ * Client copy. Keys are shared by the composer dock and the settings row; the
+ * locale service hands each component a translate function named t.
+ */
 
-    const paint = () => {
-      const root = document.documentElement
-      paper = mode === 'night' || (mode === 'auto' && appDark) ? 'night' : 'day'
-      if (enabled) {
-        root.setAttribute(ATTRIBUTE, 'on')
-        root.setAttribute(THEME_ATTRIBUTE, paper)
-      } else {
-        root.removeAttribute(ATTRIBUTE)
-        root.removeAttribute(THEME_ATTRIBUTE)
-      }
-      /* The desktop shell samples body style mutations for the native caption
-         probe; touching it makes an instant toggle reach the title bar too. */
-      if (document.body) document.body.style.setProperty('--dsh-ink-panel', enabled ? '1' : '0')
-    }
+const zh = {
+  'row.title': '墨线漫画主题',
+  'row.description': '连环画风皮肤：墨线描边、硬投影分格、网点纸底与朱印按钮。自带「宣纸」与「夜墨」两套纸色，可跟随外观自动切换；关闭后立即恢复系统主题。',
+  'row.hint': '也可以点输入框下方的「墨」印章快速开关（仅本浏览器生效）。',
+  'row.on': '已开启',
+  'row.off': '已关闭',
+  'row.appearance': '纸色',
+  'mode.auto': '跟随外观',
+  'mode.day': '宣纸',
+  'mode.night': '夜墨',
+  'dock.label': '墨线',
+  'dock.title': '切换墨线漫画主题',
+}
 
-    const persist = (key, value) => {
-      try {
-        window.localStorage.setItem(key, value)
-      } catch {
-        /* private mode: the choice still holds for this page */
-      }
-    }
+const en = {
+  'row.title': 'Ink panel comic theme',
+  'row.description': 'Comic-book skin: ink outlines, hard offset shadows and halftone paper. Ships a Day paper and a Night ink palette that can follow the app appearance; turn it off to restore the system theme instantly.',
+  'row.hint': 'You can also use the seal button under the composer. The choice is stored in this browser.',
+  'row.on': 'On',
+  'row.off': 'Off',
+  'row.appearance': 'Paper',
+  'mode.auto': 'Auto',
+  'mode.day': 'Day',
+  'mode.night': 'Night',
+  'dock.label': 'Ink',
+  'dock.title': 'Toggle the ink panel theme',
+}
 
-    const emit = () => {
-      for (const listener of listeners) {
-        try {
-          listener()
-        } catch {
-          /* one broken subscriber must not block the others */
-        }
-      }
-    }
+/* ---- src/client/20-views.js ---- */
 
-    const setSkin = (next, save) => {
-      if (enabled === next) return
-      enabled = next
-      if (save) persist(STORAGE_KEY, next ? 'on' : 'off')
-      paint()
-      emit()
-    }
+/*
+ * Views: the seal button in the composer dock and the settings row with the
+ * on/off switch plus a three-way paper picker.
+ */
 
-    const setMode = (next) => {
-      if (MODES.indexOf(next) < 0 || mode === next) return
-      mode = next
-      persist(MODE_KEY, next)
-      paint()
-      emit()
-    }
+const useTranslate = (translate) => (typeof translate === 'function' ? translate : (key) => key)
 
-    const setAppDark = (next) => {
-      if (next === appDark) return
-      appDark = next
-      paint()
-      emit()
-    }
+function InkDock({ t: translate }) {
+  const t = useTranslate(translate)
+  const { enabled, paper } = useInkState()
+  const label = paper === 'night' ? t('mode.night') : t('mode.day')
+  return h('button', {
+    type: 'button',
+    className: 'dsh-ink-dock',
+    'aria-pressed': enabled,
+    title: t('dock.title') + ' · ' + label,
+    onClick: () => setSkin(!enabled, true),
+  },
+    h('span', { className: 'dsh-ink-dock-seal', 'aria-hidden': 'true' }, '\u58a8'),
+    h('span', null, t('dock.label')),
+  )
+}
 
-    /* Both controls read the same store; the tuple identity keeps re-renders cheap. */
-    const useInkState = () => {
-      const [value, setValue] = React.useState([enabled, mode, paper])
-      React.useEffect(() => {
-        const sync = () => setValue([enabled, mode, paper])
-        listeners.add(sync)
-        sync()
-        return () => {
-          listeners.delete(sync)
-        }
-      }, [])
-      return { enabled: value[0], mode: value[1], paper: value[2] }
-    }
+function ModePicker({ t: translate }) {
+  const t = useTranslate(translate)
+  const { mode } = useInkState()
+  return h('div', { className: 'dsh-ink-modes', role: 'radiogroup', 'aria-label': t('row.appearance') },
+    MODES.map((value) => h('button', {
+      key: value,
+      type: 'button',
+      role: 'radio',
+      'aria-checked': mode === value,
+      className: mode === value ? 'dsh-ink-mode is-on' : 'dsh-ink-mode',
+      onClick: () => setMode(value),
+    }, t('mode.' + value))),
+  )
+}
 
-    /* ---- src/client/10-copy.js ---- */
-
-    /*
-     * Client copy. Keys are shared by the composer dock and the settings row; the
-     * locale service hands each component a translate function named t.
-     */
-
-    const zh = {
-      'row.title': '墨线漫画主题',
-      'row.description': '连环画风皮肤：墨线描边、硬投影分格、网点纸底与朱印按钮。自带「宣纸」与「夜墨」两套纸色，可跟随外观自动切换；关闭后立即恢复系统主题。',
-      'row.hint': '也可以点输入框下方的「墨」印章快速开关（仅本浏览器生效）。',
-      'row.on': '已开启',
-      'row.off': '已关闭',
-      'row.appearance': '纸色',
-      'mode.auto': '跟随外观',
-      'mode.day': '宣纸',
-      'mode.night': '夜墨',
-      'dock.label': '墨线',
-      'dock.title': '切换墨线漫画主题',
-    }
-
-    const en = {
-      'row.title': 'Ink panel comic theme',
-      'row.description': 'Comic-book skin: ink outlines, hard offset shadows and halftone paper. Ships a Day paper and a Night ink palette that can follow the app appearance; turn it off to restore the system theme instantly.',
-      'row.hint': 'You can also use the seal button under the composer. The choice is stored in this browser.',
-      'row.on': 'On',
-      'row.off': 'Off',
-      'row.appearance': 'Paper',
-      'mode.auto': 'Auto',
-      'mode.day': 'Day',
-      'mode.night': 'Night',
-      'dock.label': 'Ink',
-      'dock.title': 'Toggle the ink panel theme',
-    }
-
-    /* ---- src/client/20-views.js ---- */
-
-    /*
-     * Views: the seal button in the composer dock and the settings row with the
-     * on/off switch plus a three-way paper picker.
-     */
-
-    const useTranslate = (translate) => (typeof translate === 'function' ? translate : (key) => key)
-
-    function InkDock({ t: translate }) {
-      const t = useTranslate(translate)
-      const { enabled, paper } = useInkState()
-      const label = paper === 'night' ? t('mode.night') : t('mode.day')
-      return h('button', {
+function InkRow({ t: translate }) {
+  const t = useTranslate(translate)
+  const { enabled, paper } = useInkState()
+  const swatches = { day: ['#f4ecdc', '#171310', '#c2382b'], night: ['#14110e', '#f2e9d8', '#e05a45'] }[paper]
+  return h('div', { className: 'dsh-ink-row' },
+    h('div', { className: 'dsh-ink-row-copy' },
+      h('div', { className: 'dsh-ink-row-title' },
+        t('row.title'),
+        h('span', { className: 'dsh-ink-swatches', 'aria-hidden': 'true' },
+          swatches.map((color, index) => h('i', { key: index, style: { background: color } })),
+        ),
+      ),
+      h('div', { className: 'dsh-ink-row-desc' }, t('row.description')),
+      h('div', { className: 'dsh-ink-row-hint' }, t('row.hint')),
+    ),
+    h('div', { className: 'dsh-ink-row-actions' },
+      h('button', {
         type: 'button',
-        className: 'dsh-ink-dock',
+        className: enabled ? 'dsh-ink-switch is-on' : 'dsh-ink-switch',
         'aria-pressed': enabled,
-        title: t('dock.title') + ' · ' + label,
         onClick: () => setSkin(!enabled, true),
       },
-        h('span', { className: 'dsh-ink-dock-seal', 'aria-hidden': 'true' }, '\u58a8'),
-        h('span', null, t('dock.label')),
-      )
-    }
+        h('span', { className: 'dsh-ink-switch-dot', 'aria-hidden': 'true' }),
+        h('span', null, enabled ? t('row.on') : t('row.off')),
+      ),
+      h(ModePicker, { t: translate }),
+    ),
+  )
+}
 
-    function ModePicker({ t: translate }) {
-      const t = useTranslate(translate)
-      const { mode } = useInkState()
-      return h('div', { className: 'dsh-ink-modes', role: 'radiogroup', 'aria-label': t('row.appearance') },
-        MODES.map((value) => h('button', {
-          key: value,
-          type: 'button',
-          role: 'radio',
-          'aria-checked': mode === value,
-          className: mode === value ? 'dsh-ink-mode is-on' : 'dsh-ink-mode',
-          onClick: () => setMode(value),
-        }, t('mode.' + value))),
-      )
-    }
+/* ---- src/client/30-apply.js ---- */
 
-    function InkRow({ t: translate }) {
-      const t = useTranslate(translate)
-      const { enabled, paper } = useInkState()
-      const swatches = { day: ['#f4ecdc', '#171310', '#c2382b'], night: ['#14110e', '#f2e9d8', '#e05a45'] }[paper]
-      return h('div', { className: 'dsh-ink-row' },
-        h('div', { className: 'dsh-ink-row-copy' },
-          h('div', { className: 'dsh-ink-row-title' },
-            t('row.title'),
-            h('span', { className: 'dsh-ink-swatches', 'aria-hidden': 'true' },
-              swatches.map((color, index) => h('i', { key: index, style: { background: color } })),
-            ),
-          ),
-          h('div', { className: 'dsh-ink-row-desc' }, t('row.description')),
-          h('div', { className: 'dsh-ink-row-hint' }, t('row.hint')),
-        ),
-        h('div', { className: 'dsh-ink-row-actions' },
-          h('button', {
-            type: 'button',
-            className: enabled ? 'dsh-ink-switch is-on' : 'dsh-ink-switch',
-            'aria-pressed': enabled,
-            onClick: () => setSkin(!enabled, true),
-          },
-            h('span', { className: 'dsh-ink-switch-dot', 'aria-hidden': 'true' }),
-            h('span', null, enabled ? t('row.on') : t('row.off')),
-          ),
-          h(ModePicker, { t: translate }),
-        ),
-      )
-    }
+/*
+ * Wiring: stylesheet, copy, persisted state plus appearance tracking, and the
+ * two mount points. Every resource is registered through ctx.effect so that
+ * unloading the bundle restores the app exactly as it was.
+ */
 
-    /* ---- src/client/30-apply.js ---- */
+const inject = ['slots', 'locale']
 
-    /*
-     * Wiring: stylesheet, copy, persisted state plus appearance tracking, and the
-     * two mount points. Every resource is registered through ctx.effect so that
-     * unloading the bundle restores the app exactly as it was.
-     */
+function apply(ctx) {
+  ctx.effect(() => {
+    const style = document.createElement('style')
+    style.dataset.pluginCss = 'dsh-ink-panel/theme.css'
+    style.textContent = CSS
+    document.head.append(style)
+    return () => style.remove()
+  }, 'ink-panel: stylesheet')
 
-    const inject = ['slots', 'locale']
+  ctx.effect(() => ctx.locale.register(NAMESPACE, { zh, en }), 'ink-panel: copy')
 
-    function apply(ctx) {
-      ctx.effect(() => {
-        const style = document.createElement('style')
-        style.dataset.pluginCss = 'dsh-ink-panel/theme.css'
-        style.textContent = CSS
-        document.head.append(style)
-        return () => style.remove()
-      }, 'ink-panel: stylesheet')
+  ctx.effect(() => {
+    enabled = readStored()
+    mode = readMode()
+    appDark = detectAppDark()
+    paint()
 
-      ctx.effect(() => ctx.locale.register(NAMESPACE, { zh, en }), 'ink-panel: copy')
+    const body = document.body
+    const observer = typeof MutationObserver === 'function' && body
+      ? new MutationObserver(() => setAppDark(detectAppDark()))
+      : null
+    if (observer) observer.observe(body, { attributes: true, attributeFilter: [DARK_BODY_ATTRIBUTE] })
 
-      ctx.effect(() => {
-        enabled = readStored()
-        mode = readMode()
-        appDark = detectAppDark()
+    const media = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)')
+    const onMedia = () => setAppDark(detectAppDark())
+    if (media && typeof media.addEventListener === 'function') media.addEventListener('change', onMedia)
+
+    const onStorage = (event) => {
+      if (event.key === STORAGE_KEY) {
+        enabled = event.newValue !== 'off'
         paint()
-
-        const body = document.body
-        const observer = typeof MutationObserver === 'function' && body
-          ? new MutationObserver(() => setAppDark(detectAppDark()))
-          : null
-        if (observer) observer.observe(body, { attributes: true, attributeFilter: [DARK_BODY_ATTRIBUTE] })
-
-        const media = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)')
-        const onMedia = () => setAppDark(detectAppDark())
-        if (media && typeof media.addEventListener === 'function') media.addEventListener('change', onMedia)
-
-        const onStorage = (event) => {
-          if (event.key === STORAGE_KEY) {
-            enabled = event.newValue !== 'off'
-            paint()
-            emit()
-          } else if (event.key === MODE_KEY) {
-            mode = MODES.indexOf(event.newValue) >= 0 ? event.newValue : 'auto'
-            paint()
-            emit()
-          }
-        }
-        window.addEventListener('storage', onStorage)
-
-        return () => {
-          window.removeEventListener('storage', onStorage)
-          if (media && typeof media.removeEventListener === 'function') media.removeEventListener('change', onMedia)
-          if (observer) observer.disconnect()
-          listeners.clear()
-          document.documentElement.removeAttribute(ATTRIBUTE)
-          document.documentElement.removeAttribute(THEME_ATTRIBUTE)
-        }
-      }, 'ink-panel: skin state')
-
-      ctx.slots.inject('settings.general.item', () => ctx.slots.register({
-        name: 'settings.general.item',
-        id: 'ink-panel',
-        order: 12,
-        locale: NAMESPACE,
-      }, InkRow))
-
-      ctx.slots.inject('conversation.composer.dock', () => ctx.slots.register({
-        name: 'conversation.composer.dock',
-        id: 'ink-panel',
-        order: 40,
-        locale: NAMESPACE,
-      }, InkDock))
+        emit()
+      } else if (event.key === MODE_KEY) {
+        mode = MODES.indexOf(event.newValue) >= 0 ? event.newValue : 'auto'
+        paint()
+        emit()
+      }
     }
+    window.addEventListener('storage', onStorage)
+
+    return () => {
+      window.removeEventListener('storage', onStorage)
+      if (media && typeof media.removeEventListener === 'function') media.removeEventListener('change', onMedia)
+      if (observer) observer.disconnect()
+      listeners.clear()
+      document.documentElement.removeAttribute(ATTRIBUTE)
+      document.documentElement.removeAttribute(THEME_ATTRIBUTE)
+    }
+  }, 'ink-panel: skin state')
+
+  ctx.slots.inject('settings.general.item', () => ctx.slots.register({
+    name: 'settings.general.item',
+    id: 'ink-panel',
+    order: 12,
+    locale: NAMESPACE,
+  }, InkRow))
+
+  ctx.slots.inject('conversation.composer.dock', () => ctx.slots.register({
+    name: 'conversation.composer.dock',
+    id: 'ink-panel',
+    order: 40,
+    locale: NAMESPACE,
+  }, InkDock))
+}
 
 
     return { inject, apply }

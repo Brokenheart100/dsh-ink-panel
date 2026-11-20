@@ -30,10 +30,9 @@ jobs:
           fi
           echo "releasing v${version}"
 
-      - name: Rebuild and verify
+      - name: Verify the committed bundle
         run: |
-          node scripts/build.mjs
-          git diff --exit-code -- client.js
+          node scripts/build.mjs --check
           node scripts/check.mjs
 
       - name: Package the installable bundle

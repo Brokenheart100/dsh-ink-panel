@@ -27,15 +27,8 @@ jobs:
         with:
           node-version: 22
 
-      - name: Rebuild the browser bundle
-        run: node scripts/build.mjs
-
       - name: Fail if client.js is stale
-        run: |
-          if ! git diff --exit-code -- client.js; then
-            echo "::error file=client.js::client.js is out of date. Run 'node scripts/build.mjs' and commit the result."
-            exit 1
-          fi
+        run: node scripts/build.mjs --check
 
       - name: Run contract checks
         run: node scripts/check.mjs

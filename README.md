@@ -77,13 +77,14 @@ DeepSeek Harness 0.2.x（开发验证：0.2.2-rc.3）。
 
 仓库带两条 GitHub Actions 工作流：
 
-- **CI**（`.github/workflows/ci.yml`）：push 到 `main`、PR 或手动触发时，重新构建并比对 `client.js`——产物与 `src/` 不同步就直接失败；随后跑 `scripts/check.mjs` 的契约 / 调色板 / 状态机断言，并校验 `package.json`、两份 locale 与 `meta.detail` 指向的文档存在。
-- **Release**（`.github/workflows/release.yml`）：推送 `v*` 标签时先校验标签与 `package.json` 版本一致，再重新构建、检查，打成 `dsh-ink-panel-vX.Y.Z.zip` 并创建 GitHub Release（自动生成变更说明）。
+- **CI**（`.github/workflows/ci.yml`）：push 到 `main`、PR 或手动触发时，用 `node scripts/build.mjs --check` 校验提交进仓库的 `client.js` 与 `src/` 是否一致（不一致直接失败，提示重新构建）；随后跑 `scripts/check.mjs` 的契约 / 调色板 / 状态机断言，并校验 `package.json`、两份 locale 与 `meta.detail` 指向的文档存在。
+- **Release**（`.github/workflows/release.yml`）：推送 `v*` 标签时先校验标签与 `package.json` 版本一致，再校验产物、跑检查，打成 `dsh-ink-panel-vX.Y.Z.zip` 并创建 GitHub Release（自动生成变更说明）。
 
 本地等价命令：
 
 ```bash
-npm run verify           # = build + check
+npm run build            # 重新生成 client.js（改过 src/ 后必须跑）
+npm run verify           # = build --check + check，不写文件
 ```
 
 发版：
