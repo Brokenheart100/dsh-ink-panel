@@ -17,6 +17,7 @@ const pass = (name, ok, extra) => {
 const styleFiles = readdirSync(new URL('src/styles/', root)).filter((f) => f.endsWith('.css')).sort()
 let css = ''
 for (const file of styleFiles) css += readFileSync(new URL('src/styles/' + file, root), 'utf8')
+const expectedCss = styleFiles.map((file) => readFileSync(new URL('src/styles/' + file, root), 'utf8').trim()).join('\n\n')
 
 pass('styles: starts with palette', styleFiles[0] === '00-palette.css', styleFiles[0])
 pass('styles: brace balance', css.split('{').length === css.split('}').length, css.split('{').length + ' vs ' + css.split('}').length)
@@ -106,7 +107,13 @@ pass('effect: three cleanups', cleanups.length === 3, String(cleanups.length))
 pass('dom: root attribute', attrs['data-dsh-ink'] === 'on', JSON.stringify(attrs))
 pass('dom: paper attribute', attrs['data-dsh-ink-theme'] === 'day', attrs['data-dsh-ink-theme'])
 pass('dom: caption probe', bodyAttrs.style.values['--dsh-ink-panel'] === '1', bodyAttrs.style.values['--dsh-ink-panel'])
-pass('style: injected', document.head.children.length === 1 && document.head.children[0].textContent.length > 20000, String(document.head.children[0] && document.head.children[0].textContent.length))
+const injected = document.head.children[0] && document.head.children[0].textContent
+pass('style: injected', document.head.children.length === 1 && injected.length > 20000, String(injected && injected.length))
+pass('style: injected matches sources', injected === expectedCss, injected.length + ' vs ' + expectedCss.length)
+const bundleSource = readFileSync(new URL('client.js', root), 'utf8')
+const cssChunkComments = bundleSource.match(/\/\* src\/styles\/[0-9]{2}-[a-z-]+\.css \*\//g) || []
+pass('bundle: css chunked per stylesheet', cssChunkComments.length === styleFiles.length, String(cssChunkComments.length))
+pass('bundle: css emitted line by line', bundleSource.split('\n').length >= expectedCss.split('\n').length + 20, bundleSource.split('\n').length + ' lines')
 pass('locale: registered', !!locales['ink-panel'] && locales['ink-panel'].zh['row.title'] === '墨线漫画主题', Object.keys(locales))
 pass('locale: night copy', !!locales['ink-panel'] && locales['ink-panel'].zh['mode.night'] === '夜墨')
 pass('slots: two mounts', JSON.stringify(slotNames) === JSON.stringify(['settings.general.item', 'conversation.composer.dock']), JSON.stringify(slotNames))

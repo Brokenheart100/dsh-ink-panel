@@ -12,7 +12,9 @@ window.__ModuleLoader__.load({
   factory(require) {
     const React = require('react')
     const h = React.createElement
-    const CSS = __THEME_CSS__
+    const CSS = [
+__THEME_CSS__
+    ].join('')
 
 __CLIENT_CODE__
 
