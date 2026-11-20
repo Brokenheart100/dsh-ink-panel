@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Local scratch space (asar dumps, mock pages, screenshots)
+.tmp/
+*.log
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Build output is NOT ignored on purpose: client.js is the shipped browser half
+# consumed by DSH via exports["./client"], so it must travel with the repo for
+# the plugin to load from a fresh clone.
