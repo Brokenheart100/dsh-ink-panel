@@ -1,0 +1,30 @@
+/* =============================================================================
+   dsh-ink-panel · 40 · conversation
+   Message column, tab strip and message bubbles.
+   ============================================================================= */
+
+html[data-dsh-ink] [data-conversation-scroll],
+html[data-dsh-ink] [data-conversation-region='chat'] {
+  background-color: var(--ip-paper);
+  background-image: radial-gradient(var(--ip-dot) 1px, transparent 1.1px);
+  background-size: 8px 8px;
+}
+
+html[data-dsh-ink] [data-conversation-tabs] {
+  border-bottom: 1px solid var(--ip-line-soft);
+}
+
+html[data-dsh-ink] [data-conversation-tabs] button[aria-selected='true'] {
+  color: var(--ip-ink);
+  font-weight: 700;
+  border-bottom: 3px solid var(--ip-red);
+}
+
+html[data-dsh-ink] [data-message-bubble] {
+  background-color: var(--ip-paper-hi);
+  border: 1.5px solid var(--ip-line);
+  border-radius: 4px;
+  box-shadow: 2px 2px 0 0 rgb(var(--ip-shadow-rgb) / 50%);
+  outline: 1px solid rgb(var(--ip-ink-rgb) / 18%);
+  outline-offset: 2px;
+}

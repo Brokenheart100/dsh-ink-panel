@@ -1,0 +1,74 @@
+/* =============================================================================
+   dsh-ink-panel · 50 · welcome cards and composer
+   Landing cards plus the composer card and its buttons.
+   ============================================================================= */
+
+html[data-dsh-ink] :is([class$='_cards'], [class*='_cards ']) {
+  gap: 10px;
+}
+
+html[data-dsh-ink] :is([class$='_card'], [class*='_card ']) {
+  background-color: var(--ip-paper-hi);
+  border: 2px solid var(--ip-line);
+  border-radius: 4px;
+  box-shadow: var(--ip-shadow-sm);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+html[data-dsh-ink] :is([class$='_cards'], [class*='_cards ']) :is([class$='_card'], [class*='_card ']):hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--ip-shadow);
+}
+
+html[data-dsh-ink] [data-composer-seat] :is([class$='_card'], [class*='_card ']) {
+  background-color: var(--ip-paper-hi);
+  border: 2px solid var(--ip-ink);
+  border-radius: 6px;
+  box-shadow: 3px 3px 0 0 var(--ip-shadow-ink);
+  outline: 1px solid rgb(var(--ip-ink-rgb) / 16%);
+  outline-offset: 3px;
+  transition: box-shadow 0.12s ease, outline-color 0.12s ease;
+}
+
+html[data-dsh-ink] [data-composer-seat] :is([class$='_card'], [class*='_card ']):focus-within {
+  box-shadow: 3px 3px 0 0 var(--ip-red);
+  outline-color: rgb(var(--ip-red-rgb) / 42%);
+}
+
+html[data-dsh-ink] [data-composer-seat] :is([class$='_card'], [class*='_card ']) :is(textarea, input) {
+  background-color: transparent;
+  color: var(--ip-ink);
+  font-family: var(--ip-font-body);
+}
+
+html[data-dsh-ink] :is(input, textarea)::placeholder {
+  color: rgb(var(--ip-ink-rgb) / 40%);
+}
+
+html[data-dsh-ink] :is([data-composer-seat], [role='dialog']) button:not(.dsh-ink-dock):not(.dsh-ink-switch) {
+  border: 1.5px solid var(--ip-line);
+  border-radius: 4px;
+  background-color: var(--ip-paper-hi);
+  color: var(--ip-ink);
+  box-shadow: 1.5px 1.5px 0 0 var(--ip-line);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+}
+
+html[data-dsh-ink] :is([data-composer-seat], [role='dialog']) button:not(.dsh-ink-dock):not(.dsh-ink-switch):hover:not(:disabled) {
+  background-color: var(--ip-paper-hover);
+  transform: translate(-1px, -1px);
+  box-shadow: 2.5px 2.5px 0 0 var(--ip-line);
+}
+
+html[data-dsh-ink] :is([data-composer-seat], [role='dialog']) button:not(.dsh-ink-dock):not(.dsh-ink-switch):active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 0 0 0 0 var(--ip-line);
+}
+
+html[data-dsh-ink] :is([data-composer-seat], [role='dialog']) button:not(.dsh-ink-dock):not(.dsh-ink-switch):disabled {
+  border-style: dashed;
+  border-color: var(--ip-line-mid);
+  box-shadow: none;
+  opacity: 0.55;
+  background-color: transparent;
+}

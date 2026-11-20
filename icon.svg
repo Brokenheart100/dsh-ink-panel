@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Ink panel">
+  <rect x="0.5" y="0.5" width="31" height="31" rx="5" fill="#f4ecdc" stroke="#171310" stroke-width="1"/>
+  <rect x="3.5" y="3.5" width="16" height="11" fill="#fbf6ea" stroke="#171310" stroke-width="1.6"/>
+  <rect x="3.5" y="17.5" width="16" height="11" fill="#171310" stroke="#171310" stroke-width="1.6"/>
+  <rect x="18" y="3.5" width="8" height="7" fill="#e6dac1" stroke="#171310" stroke-width="1.6"/>
+  <rect x="18" y="13" width="8" height="7" fill="#fbf6ea" stroke="#171310" stroke-width="1.6"/>
+  <rect x="18" y="23" width="8" height="5" fill="#f4ecdc" stroke="#171310" stroke-width="1.6"/>
+  <circle cx="23.4" cy="24.9" r="2.6" fill="#c2382b" stroke="#171310" stroke-width="0.9"/>
+  <path d="M6 6.5h7M6 9.5h4.5M6 12h6" stroke="#171310" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/>
+  <path d="M6 20.5h7M6 23h5" stroke="#f4ecdc" stroke-width="1.1" stroke-linecap="round" opacity="0.8"/>
+</svg>

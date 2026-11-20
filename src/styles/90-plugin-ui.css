@@ -1,0 +1,210 @@
+/* =============================================================================
+   dsh-ink-panel · 90 · plugin ui
+   Seal toggle and settings row; not scoped, so the controls look right while the skin is off.
+   ============================================================================= */
+
+.dsh-ink-dock {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 10px 0 6px;
+  border: 2px solid var(--ip-ink);
+  border-radius: 4px;
+  background-color: var(--ip-red);
+  color: var(--ip-on-accent);
+  font-family: var(--ip-font-body);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 0 var(--ip-shadow-ink);
+  transition: transform 0.14s ease, box-shadow 0.14s ease, background-color 0.14s ease;
+}
+
+.dsh-ink-dock:hover {
+  background-color: var(--ip-red-deep);
+  transform: translate(-1px, -1px) rotate(-1.5deg);
+  box-shadow: 3px 3px 0 0 var(--ip-shadow-ink);
+}
+
+.dsh-ink-dock:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 0 var(--ip-shadow-ink);
+}
+
+.dsh-ink-dock[aria-pressed='false'] {
+  background-color: var(--ip-paper-hi);
+  color: var(--ip-ink-soft);
+}
+
+.dsh-ink-dock-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  background-color: var(--ip-on-accent);
+  color: var(--ip-red);
+  font-family: var(--ip-font-serif);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.dsh-ink-dock[aria-pressed='false'] .dsh-ink-dock-seal {
+  background-color: var(--ip-ink);
+  color: var(--ip-paper-hi);
+}
+
+.dsh-ink-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+  padding: 16px 0 4px;
+  border-top: 1px dashed rgb(var(--ip-ink-rgb) / 22%);
+}
+
+.dsh-ink-row-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.dsh-ink-row-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--ip-font-body);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ip-ink);
+}
+
+.dsh-ink-swatches {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.dsh-ink-swatches i {
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--ip-line);
+  border-radius: 2px;
+}
+
+.dsh-ink-row-desc {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ip-ink-mute);
+}
+
+.dsh-ink-row-hint {
+  margin-top: 4px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: rgb(var(--ip-ink-rgb) / 48%);
+}
+
+.dsh-ink-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  height: 30px;
+  padding: 0 11px 0 6px;
+  border: 2px solid var(--ip-ink);
+  border-radius: 4px;
+  background-color: var(--ip-paper-hi);
+  color: var(--ip-ink-soft);
+  font-family: var(--ip-font-body);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 0 var(--ip-shadow-ink);
+  transition: transform 0.14s ease, box-shadow 0.14s ease, background-color 0.14s ease, color 0.14s ease;
+}
+
+.dsh-ink-switch:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 0 var(--ip-shadow-ink);
+}
+
+.dsh-ink-switch:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 0 var(--ip-shadow-ink);
+}
+
+.dsh-ink-switch.is-on {
+  background-color: var(--ip-red);
+  color: var(--ip-on-accent);
+}
+
+.dsh-ink-switch-dot {
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid var(--ip-ink);
+  border-radius: 50%;
+  background-color: var(--ip-ink);
+}
+
+.dsh-ink-switch.is-on .dsh-ink-switch-dot {
+  background-color: var(--ip-on-accent);
+}
+
+.dsh-ink-switch:focus-visible,
+.dsh-ink-dock:focus-visible {
+  outline: 2px dashed var(--ip-red);
+  outline-offset: 2px;
+}
+/* --- paper picker (settings row) ------------------------------------------ */
+
+.dsh-ink-row-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.dsh-ink-modes {
+  display: inline-flex;
+  overflow: hidden;
+  border: 2px solid var(--ip-line);
+  border-radius: 4px;
+  background-color: var(--ip-paper-hi);
+  box-shadow: 2px 2px 0 0 rgb(var(--ip-shadow-rgb) / 28%);
+}
+
+.dsh-ink-mode {
+  height: 26px;
+  padding: 0 9px;
+  border: 0;
+  border-left: 1px solid var(--ip-line-soft);
+  background-color: transparent;
+  color: var(--ip-ink-mute);
+  font-family: var(--ip-font-body);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dsh-ink-mode:first-child {
+  border-left: 0;
+}
+
+.dsh-ink-mode:hover {
+  background-color: rgb(var(--ip-ink-rgb) / 8%);
+  color: var(--ip-ink);
+}
+
+.dsh-ink-mode.is-on {
+  background-color: var(--ip-red);
+  color: var(--ip-on-accent);
+}
+
+.dsh-ink-mode:focus-visible {
+  outline: 2px dashed var(--ip-red);
+  outline-offset: -3px;
+}
+

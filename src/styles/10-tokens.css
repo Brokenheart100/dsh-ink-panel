@@ -1,0 +1,183 @@
+/* =============================================================================
+   dsh-ink-panel · 10 · dsw token bridge
+   The app reads --dsw-* tokens; every one points at a palette role.
+   ============================================================================= */
+
+html[data-dsh-ink] body,
+html[data-dsh-ink] body[data-ds-dark-theme] {
+
+  --dsw-alias-bg-base: var(--ip-paper);
+  --dsw-alias-bg-layer-1: var(--ip-paper-hi);
+  --dsw-alias-bg-layer-2: var(--ip-paper-mid);
+  --dsw-alias-bg-layer-3: var(--ip-paper-lo);
+  --dsw-alias-bg-overlay: rgb(var(--ip-paper-rgb) / 94%);
+  --dsw-alias-bg-skeleton: var(--ip-paper-sink);
+  --dsw-alias-bg-mask-1: rgb(var(--ip-ink-rgb) / 46%);
+  --dsw-alias-bg-mask-2: rgb(var(--ip-ink-rgb) / 60%);
+  --dsw-alias-bg-mask-3: rgb(var(--ip-ink-rgb) / 74%);
+  --dsw-alias-bg-mask-drop: rgb(var(--ip-ink-rgb) / 16%);
+  --dsw-alias-bg-mask-photo: rgb(var(--ip-ink-rgb) / 86%);
+  --dsw-alias-bg-multi-select: rgb(var(--ip-yellow-rgb) / 28%);
+  --dsw-alias-bg-module-platform: var(--ip-paper-hi);
+  --dsw-alias-bg-document-preview: var(--ip-paper-hi);
+  --dsw-alias-bg-document-selection: rgb(var(--ip-yellow-rgb) / 34%);
+
+  --dsw-alias-border-l1: var(--ip-line-soft);
+  --dsw-alias-border-l2: var(--ip-line-mid);
+  --dsw-alias-border-l2-darkmode-thin: rgb(var(--ip-ink-rgb) / 24%);
+  --dsw-alias-border-l3: rgb(var(--ip-ink-rgb) / 55%);
+  --dsw-alias-border-l4: var(--ip-line);
+  --dsw-alias-border-inverted: var(--ip-paper-hi);
+  --dsw-alias-border-inverted2: rgb(var(--ip-paper-rgb) / 36%);
+  --dsw-alias-border-selected: var(--ip-red);
+  --dsw-elevation-stroke-color: rgb(var(--ip-ink-rgb) / 55%);
+
+  --dsw-alias-label-primary: var(--ip-ink);
+  --dsw-alias-label-primary-foreground: var(--ip-paper-hi);
+  --dsw-alias-label-primary-inverted: var(--ip-paper-hi);
+  --dsw-alias-label-primary-bluish: var(--ip-blue);
+  --dsw-alias-label-primary-dimmed: rgb(var(--ip-ink-rgb) / 62%);
+  --dsw-alias-label-secondary: var(--ip-ink-soft);
+  --dsw-alias-label-tertiary: var(--ip-ink-mute);
+  --dsw-alias-label-caption: var(--ip-ink-mute);
+  --dsw-alias-label-dimmed: rgb(var(--ip-ink-rgb) / 54%);
+  --dsw-alias-label-document-preview: var(--ip-ink-soft);
+  --dsw-alias-label-on-color: var(--ip-paper-hi);
+  --dsw-alias-label-shimmer: rgb(var(--ip-ink-rgb) / 10%);
+  --dsw-alias-label-deep-diving: var(--ip-red);
+  --dsw-alias-label-deep-diving-shimmer: rgb(var(--ip-red-rgb) / 20%);
+  --dsw-alias-link: var(--ip-red-link);
+
+  --dsw-alias-brand-primary: var(--ip-red);
+  --dsw-alias-brand-primary-invert: var(--ip-ink);
+  --dsw-alias-brand-text: var(--ip-red);
+  --dsw-alias-brand-primary-new-colorprimary-new-color: var(--ip-red);
+  --dsw-alias-button-primary-fill: var(--ip-ink);
+  --dsw-alias-button-primary-hover: var(--ip-ink-deep);
+  --dsw-alias-button-primary-dimmed: rgb(var(--ip-ink-rgb) / 42%);
+  --dsw-alias-button-contrast-fill: var(--ip-ink);
+  --dsw-alias-button-elevated-fill: var(--ip-paper-hi);
+  --dsw-alias-button-floating-fill: var(--ip-paper-hi);
+  --dsw-alias-button-floating-hover: var(--ip-paper-hover);
+  --dsw-alias-button-ghost-active-fill: rgb(var(--ip-red-rgb) / 14%);
+  --dsw-alias-button-ghost-active-border: rgb(var(--ip-red-rgb) / 50%);
+  --dsw-alias-button-ghost-active-hover: rgb(var(--ip-red-rgb) / 24%);
+  --dsw-alias-button-info-fill: var(--ip-blue);
+  --dsw-alias-button-info-hover: var(--ip-blue-deep);
+  --dsw-alias-button-tool-bar-fill: rgb(var(--ip-paper-rgb) / 92%);
+  --dsw-alias-button-tool-bar-fill-invisible: transparent;
+  --dsw-alias-button-tool-bar-hover: rgb(var(--ip-ink-rgb) / 7%);
+
+  --dsw-alias-card-fill: var(--ip-paper-hi);
+  --dsw-alias-card-fill-hover: var(--ip-paper-hover);
+  --dsw-alias-card-tile-fill: var(--ip-paper);
+  --dsw-alias-interactive-bg-hover: rgb(var(--ip-ink-rgb) / 6.5%);
+  --dsw-alias-interactive-bg-hover-accent: rgb(var(--ip-red-rgb) / 11%);
+  --dsw-alias-interactive-bg-hover-danger: rgb(var(--ip-red-rgb) / 16%);
+  --dsw-alias-interactive-bg-hover-solid: var(--ip-paper-lo);
+  --dsw-alias-interactive-bg-active: rgb(var(--ip-ink-rgb) / 11%);
+  --dsw-alias-switch-thumb: var(--ip-paper-hi);
+
+  --dsw-alias-chart-messages: var(--ip-red);
+  --dsw-alias-chart-system: var(--ip-blue);
+  --dsw-alias-chart-tools: var(--ip-green);
+  --dsw-alias-code-diff-added: rgb(var(--ip-green-rgb) / 16%);
+  --dsw-alias-code-diff-deleted: rgb(var(--ip-red-rgb) / 16%);
+  --dsw-alias-file-diff-added-bg: rgb(var(--ip-green-rgb) / 10%);
+  --dsw-alias-file-diff-added-gutter: rgb(var(--ip-green-rgb) / 30%);
+  --dsw-alias-file-diff-added-marker: var(--ip-green);
+  --dsw-alias-file-diff-deleted-bg: rgb(var(--ip-red-rgb) / 10%);
+  --dsw-alias-file-diff-deleted-gutter: rgb(var(--ip-red-rgb) / 30%);
+  --dsw-alias-file-diff-deleted-marker: var(--ip-red);
+  --dsw-alias-json-tree-hover: rgb(var(--ip-ink-rgb) / 6%);
+  --dsw-alias-json-tree-icon: var(--ip-ink-mute);
+  --dsw-alias-json-tree-keyword: var(--ip-red);
+  --dsw-alias-json-tree-number: var(--ip-warn);
+  --dsw-alias-json-tree-property: var(--ip-blue);
+  --dsw-alias-json-tree-punctuation: var(--ip-ink-mute);
+  --dsw-alias-json-tree-string: var(--ip-green);
+
+  --dsw-alias-markdown-citation: rgb(var(--ip-ink-rgb) / 6%);
+  --dsw-alias-markdown-code-block: var(--ip-paper-lo);
+  --dsw-alias-markdown-code-block-banner: var(--ip-paper-code-banner);
+  --dsw-alias-markdown-code-segment-selected: var(--ip-paper-hi);
+  --dsw-alias-markdown-code-segment-unselected: transparent;
+  --dsw-alias-markdown-inline-code: rgb(var(--ip-ink-rgb) / 7%);
+  --dsw-alias-markdown-placeholder: rgb(var(--ip-ink-rgb) / 42%);
+  --dsw-alias-markdown-tag: rgb(var(--ip-blue-rgb) / 14%);
+
+  --dsw-alias-menu-group-header-fill: rgb(var(--ip-ink-rgb) / 5%);
+  --dsw-alias-menu-icon: var(--ip-ink-soft);
+  --dsw-alias-menu-surface-fill: var(--ip-paper-hi);
+  --dsw-menu-surface-fill: var(--ip-paper-hi);
+  --dsw-menu-backdrop-filter: blur(6px) saturate(1.05);
+  --dsw-alias-hovercard-bg: var(--ip-paper-hi);
+  --dsw-alias-hovercard-label-primary: var(--ip-ink);
+  --dsw-alias-hovercard-label-secondary: var(--ip-ink-soft);
+  --dsw-alias-hovercard-label-tertiary: var(--ip-ink-mute);
+  --dsw-alias-hovercard-state-done: var(--ip-green);
+  --dsw-alias-hovercard-state-error: var(--ip-red);
+  --dsw-alias-toast-bg: var(--ip-ink);
+  --dsw-alias-toast-label: var(--ip-paper-mid);
+  --dsw-alias-toast-action: var(--ip-yellow);
+  --dsw-alias-tooltip-bg: var(--ip-ink);
+  --dsw-alias-tooltip-label: var(--ip-paper-hi);
+  --dsw-alias-tooltip-key-bg: rgb(var(--ip-paper-rgb) / 16%);
+  --dsw-alias-scrollbar-bg-l1: rgb(var(--ip-ink-rgb) / 34%);
+  --dsw-alias-scrollbar-bg-l2: rgb(var(--ip-ink-rgb) / 46%);
+  --dsw-alias-scrollbar-hover-l1: var(--ip-red);
+  --dsw-alias-scrollbar-hover-l2: var(--ip-red-deep);
+  --dsw-alias-settings-card-fill: var(--ip-paper-hi);
+  --dsw-alias-settings-card-stroke: rgb(var(--ip-ink-rgb) / 34%);
+
+  --dsw-alias-state-business-primary: var(--ip-blue);
+  --dsw-alias-state-business-tertiary: rgb(var(--ip-blue-rgb) / 16%);
+  --dsw-alias-state-done-primary: var(--ip-green);
+  --dsw-alias-state-error-primary: var(--ip-red);
+  --dsw-alias-state-error-secondary: rgb(var(--ip-red-rgb) / 16%);
+  --dsw-alias-state-idle-primary: var(--ip-ink-mute);
+  --dsw-alias-state-success-primary: var(--ip-green);
+  --dsw-alias-state-success-secondary: rgb(var(--ip-green-rgb) / 16%);
+  --dsw-alias-state-success-tertiary: rgb(var(--ip-green-rgb) / 10%);
+  --dsw-alias-state-warn-label: var(--ip-warn-deep);
+  --dsw-alias-state-warn-primary: var(--ip-warn);
+  --dsw-alias-state-warn-secondary: rgb(var(--ip-warn-rgb) / 18%);
+  --dsw-alias-state-warn-tertiary: rgb(var(--ip-warn-rgb) / 10%);
+  --dsw-alias-trajectory-accent: var(--ip-red);
+  --dsw-alias-turn-trigger-bg: rgb(var(--ip-ink-rgb) / 6%);
+  --dsw-alias-turn-trigger-bg-hover: rgb(var(--ip-ink-rgb) / 11%);
+
+  --dsw-alias-illustration-background: var(--ip-paper-lo);
+  --dsw-alias-illustration-backing: var(--ip-paper-illustration);
+  --dsw-alias-illustration-detail: var(--ip-red);
+  --dsw-alias-illustration-inset: rgb(var(--ip-ink-rgb) / 6%);
+  --dsw-alias-illustration-shadow: rgb(var(--ip-ink-rgb) / 18%);
+  --dsw-alias-illustration-surface: var(--ip-paper-hi);
+  --dsw-specific-sidebar-fill: var(--ip-paper-lo);
+  --dsw-specific-sidebar-tint: var(--ip-paper-tint);
+  --dsw-specific-sidebar-nav-item-active: var(--ip-paper-active);
+  --dsw-specific-sidebar-nav-item-active-accent: var(--ip-red);
+  --dsw-specific-sidebar-right-flash: rgb(var(--ip-red-rgb) / 16%);
+  --dsw-specific-sidebar-wash-top: transparent;
+  --dsw-specific-sidebar-wash-top-clear: transparent;
+  --dsw-specific-sidebar-wash-bottom: transparent;
+  --dsw-specific-sidebar-wash-bottom-clear: transparent;
+  --dsw-specific-bubble: var(--ip-paper-hi);
+  --dsw-specific-bubble-highlight: var(--ip-paper-glow);
+  --dsw-specific-file-upload-track: var(--ip-paper-lo);
+  --dsw-specific-guide-hero: var(--ip-paper-lo);
+  --dsw-specific-input-major: var(--ip-paper-hi);
+  --dsw-specific-login-input: var(--ip-paper-hi);
+  --dsw-specific-menu: var(--ip-paper-hi);
+  --dsw-specific-selector: var(--ip-paper-hi);
+  --dsw-specific-tip: var(--ip-paper-hover);
+
+  --dsw-radius-xs: 2px;
+  --dsw-radius-sm: 3px;
+  --dsw-radius-md: 5px;
+  --dsw-radius-lg: 7px;
+  --dsw-radius-xl: 9px;
+  --dsw-radius-panel: 10px;
+  --dsw-focus-ring-color: var(--ip-red);
+  --dsw-focus-ring-width: 2px;
+}

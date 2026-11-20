@@ -1,0 +1,18 @@
+/* =============================================================================
+   dsh-ink-panel · 80 · lightbox
+   The full-screen image viewer.
+   ============================================================================= */
+
+html[data-dsh-ink] [role='dialog'][aria-modal='true']:has(> div > img) {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  outline: 0;
+}
+
+html[data-dsh-ink] [role='dialog'][aria-modal='true']:has(> div > img)>div>img {
+  border: 2px solid var(--ip-ink);
+  border-radius: 4px;
+  box-shadow: 6px 6px 0 0 rgb(var(--ip-red-rgb) / 82%);
+}

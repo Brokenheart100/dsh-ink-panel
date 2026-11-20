@@ -1,0 +1,114 @@
+/* =============================================================================
+   dsh-ink-panel · 00-palette
+   The two paper palettes. Everything else in src/styles only references
+   var(--ip-*) and never a literal colour, so switching the theme attribute
+   repaints the whole bundle: html[data-dsh-ink][data-dsh-ink-theme='day'|'night'].
+   ============================================================================= */
+
+:root {
+  /* paper surfaces — day */
+  --ip-paper: #f4ecdc;
+  --ip-paper-hi: #fbf6ea;
+  --ip-paper-mid: #f7f0e1;
+  --ip-paper-lo: #efe5d0;
+  --ip-paper-hover: #f5ecd8;
+  --ip-paper-tint: #f2e8d3;
+  --ip-paper-active: #e6d9bd;
+  --ip-paper-sink: #e6dac1;
+  --ip-paper-code-banner: #e4d6ba;
+  --ip-paper-illustration: #e3d6ba;
+  --ip-paper-glow: #fffdf6;
+
+  /* ink + accents — day */
+  --ip-ink: #171310;
+  --ip-ink-soft: #4a4238;
+  --ip-ink-mute: #6d6254;
+  --ip-ink-deep: #2c251d;
+  --ip-red: #c2382b;
+  --ip-red-deep: #98291f;
+  --ip-red-link: #b0352a;
+  --ip-blue: #2f4a6f;
+  --ip-blue-deep: #26405f;
+  --ip-yellow: #e6ac2b;
+  --ip-green: #3b6b52;
+  --ip-warn: #a86c12;
+  --ip-warn-deep: #85560f;
+
+  /* channel triples: alpha washes are written as rgb(var(--ip-x-rgb) / n%)
+     so every tint flips direction together with the palette */
+  --ip-ink-rgb: 23 19 16;
+  --ip-paper-rgb: 251 246 234;
+  --ip-shadow-rgb: 23 19 16;
+  --ip-red-rgb: 194 56 43;
+  --ip-blue-rgb: 47 74 111;
+  --ip-yellow-rgb: 230 172 43;
+  --ip-green-rgb: 59 107 82;
+  --ip-warn-rgb: 168 108 18;
+
+  /* constants: cream text always sits on seal-red, in both palettes */
+  --ip-on-accent: #fff8ec;
+  --ip-shadow-ink: var(--ip-ink);
+
+  /* derived strokes, dots and hard shadows */
+  --ip-line: rgb(var(--ip-ink-rgb) / 82%);
+  --ip-line-mid: rgb(var(--ip-ink-rgb) / 34%);
+  --ip-line-soft: rgb(var(--ip-ink-rgb) / 20%);
+  --ip-dot: rgb(var(--ip-ink-rgb) / 11.5%);
+  --ip-hatch: rgb(var(--ip-ink-rgb) / 5.5%);
+  --ip-shadow: 3px 3px 0 0 var(--ip-shadow-ink);
+  --ip-shadow-sm: 2px 2px 0 0 var(--ip-shadow-ink);
+
+  /* type */
+  --ip-font-display: Impact, Haettenschweiler, "Arial Black", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --ip-font-body: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ip-font-serif: "Songti SC", "Noto Serif SC", "Source Han Serif SC", STSong, Georgia, serif;
+  --ip-font-mono: "JetBrains Mono", "Cascadia Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+/* --- night: the same drawing on black paper ------------------------------- */
+html[data-dsh-ink][data-dsh-ink-theme='night'] {
+  --ip-paper: #14110e;
+  --ip-paper-hi: #1d1813;
+  --ip-paper-mid: #181310;
+  --ip-paper-lo: #0f0c09;
+  --ip-paper-hover: #241e17;
+  --ip-paper-tint: #1a1511;
+  --ip-paper-active: #2a2218;
+  --ip-paper-sink: #0b0907;
+  --ip-paper-code-banner: #1b1510;
+  --ip-paper-illustration: #171310;
+  --ip-paper-glow: #2b241a;
+
+  --ip-ink: #f2e9d8;
+  --ip-ink-soft: #cdc0aa;
+  --ip-ink-mute: #9c907c;
+  --ip-ink-deep: #fff7e8;
+  --ip-red: #e05a45;
+  --ip-red-deep: #c0462f;
+  --ip-red-link: #f0826c;
+  --ip-blue: #8fb3d6;
+  --ip-blue-deep: #a9c7e3;
+  --ip-yellow: #f0c15a;
+  --ip-green: #7dbb9b;
+  --ip-warn: #e2a83f;
+  --ip-warn-deep: #f2c164;
+
+  --ip-ink-rgb: 242 233 216;
+  --ip-paper-rgb: 30 25 19;
+  --ip-shadow-rgb: 0 0 0;
+  --ip-red-rgb: 224 90 69;
+  --ip-blue-rgb: 143 179 214;
+  --ip-yellow-rgb: 240 193 90;
+  --ip-green-rgb: 125 187 155;
+  --ip-warn-rgb: 226 168 63;
+
+  --ip-shadow-ink: #050403;
+}
+
+html[data-dsh-ink][data-dsh-ink-theme='day'] {
+  color-scheme: light;
+}
+
+html[data-dsh-ink][data-dsh-ink-theme='night'] {
+  color-scheme: dark;
+}

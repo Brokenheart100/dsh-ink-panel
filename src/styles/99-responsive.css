@@ -1,0 +1,32 @@
+/* =============================================================================
+   dsh-ink-panel · 99 · responsive
+   Narrow windows and reduced motion.
+   ============================================================================= */
+
+@media (max-width: 720px) {
+  .dsh-ink-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .dsh-ink-row-actions {
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  html[data-dsh-ink] :is([data-composer-seat], [role='dialog']) button:not(.dsh-ink-dock):not(.dsh-ink-switch),
+  .dsh-ink-dock,
+  .dsh-ink-switch {
+    transition: none;
+  }
+
+  .dsh-ink-dock:hover,
+  .dsh-ink-switch:hover,
+  html[data-dsh-ink] :is([class$='_cards'], [class*='_cards ']) :is([class$='_card'], [class*='_card ']):hover {
+    transform: none;
+  }
+}

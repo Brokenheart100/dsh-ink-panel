@@ -1,0 +1,60 @@
+/* =============================================================================
+   dsh-ink-panel · 30 · sidebar
+   Brand block, new-session seal and the session list.
+   ============================================================================= */
+
+html[data-dsh-ink] :is([class$='_sidebarCol'], [class*='_sidebarCol ']) {
+  background-color: var(--ip-paper-lo);
+  background-image: radial-gradient(var(--ip-dot) 1px, transparent 1.1px);
+  background-size: 6px 6px;
+  border-right: 2px solid var(--ip-line);
+  box-shadow: inset -1px 0 0 0 rgb(var(--ip-paper-rgb) / 85%);
+}
+
+html[data-dsh-ink] :is([class$='_centerCol'], [class*='_centerCol ']) {
+  background-color: var(--ip-paper);
+}
+
+html[data-dsh-ink] :is([class$='_rightbarCol'], [class*='_rightbarCol ']) {
+  border-left: 1px solid var(--ip-line-soft);
+}
+
+html[data-dsh-ink] :is([class$='_brandName'], [class*='_brandName ']) {
+  font-family: var(--ip-font-display);
+  font-size: 13.5px;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  color: var(--ip-ink);
+  text-shadow: 1px 1px 0 rgb(var(--ip-red-rgb) / 50%);
+}
+
+html[data-dsh-ink] :is([class$='_brandMark'], [class*='_brandMark ']) {
+  border: 2px solid var(--ip-ink);
+  border-radius: 6px;
+  background-color: var(--ip-red);
+  color: var(--ip-paper-hi);
+  box-shadow: var(--ip-shadow-sm);
+  transform: rotate(-6deg);
+}
+
+html[data-dsh-ink] :is([class$='_newSession'], [class*='_newSession ']):not(:is([class$='_newSessionRow'], [class*='_newSessionRow '])) {
+  border: 2px solid var(--ip-ink);
+  border-radius: 4px;
+  background-color: var(--ip-red);
+  color: var(--ip-on-accent);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: var(--ip-shadow-sm);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+}
+
+html[data-dsh-ink] :is([class$='_newSession'], [class*='_newSession ']):not(:is([class$='_newSessionRow'], [class*='_newSessionRow '])):hover {
+  background-color: var(--ip-red-deep);
+  transform: translate(-1px, -1px);
+  box-shadow: var(--ip-shadow);
+}
+
+html[data-dsh-ink] :is([class$='_newSession'], [class*='_newSession ']):not(:is([class$='_newSessionRow'], [class*='_newSessionRow '])):active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 0 var(--ip-shadow-ink);
+}

@@ -1,0 +1,126 @@
+/* =============================================================================
+   dsh-ink-panel · 70 · markdown
+   Prose in the conversation: headings, links, code, quotes, tables.
+   ============================================================================= */
+
+html[data-dsh-ink] [data-conversation-scroll] h1,
+html[data-dsh-ink] [data-conversation-scroll] h2,
+html[data-dsh-ink] [data-conversation-scroll] h3 {
+  font-family: var(--ip-font-serif);
+  color: var(--ip-ink);
+  letter-spacing: 0.015em;
+}
+
+html[data-dsh-ink] [data-conversation-scroll] h1 {
+  border-bottom: 3px double var(--ip-red);
+  padding-bottom: 4px;
+}
+
+html[data-dsh-ink] [data-conversation-scroll] h2 {
+  border-left: 4px solid var(--ip-red);
+  padding-left: 8px;
+}
+
+html[data-dsh-ink] a {
+  color: var(--ip-red-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+html[data-dsh-ink] a:hover {
+  background-color: rgb(var(--ip-yellow-rgb) / 32%);
+  color: var(--ip-red-deep);
+}
+
+html[data-dsh-ink] pre {
+  background-color: var(--ip-paper-lo);
+  border: 2px solid var(--ip-line);
+  border-radius: 4px;
+  box-shadow: 2px 2px 0 0 rgb(var(--ip-shadow-rgb) / 35%);
+  font-family: var(--ip-font-mono);
+}
+
+html[data-dsh-ink] :not(pre)>code {
+  background-color: rgb(var(--ip-ink-rgb) / 7%);
+  border: 1px solid var(--ip-line-soft);
+  border-radius: 2px;
+  padding: 0.5px 4px;
+  font-family: var(--ip-font-mono);
+  font-size: 0.92em;
+  color: var(--ip-red-link);
+}
+
+html[data-dsh-ink] blockquote {
+  border-left: 4px solid var(--ip-red);
+  background-color: rgb(var(--ip-ink-rgb) / 3.5%);
+  margin-left: 0;
+  padding: 2px 12px;
+  font-family: var(--ip-font-serif);
+  color: var(--ip-ink-soft);
+}
+
+html[data-dsh-ink] table {
+  border: 2px solid var(--ip-line);
+  border-radius: 3px;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  margin: 6px 0 16px;
+  box-shadow: 2px 2px 0 0 rgb(var(--ip-shadow-rgb) / 28%);
+}
+
+html[data-dsh-ink] th {
+  background-color: var(--ip-paper-lo);
+  border-bottom: 1.5px solid var(--ip-line);
+  padding: 9px 15px;
+  text-align: left;
+  font-family: var(--ip-font-body);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+html[data-dsh-ink] td {
+  border-bottom: 1px solid var(--ip-line-soft);
+  padding: 9px 15px;
+  vertical-align: top;
+}
+
+html[data-dsh-ink] tr:last-child td {
+  border-bottom: 0;
+}
+
+/* DSH's own .tableScroll rules zero the outer cell padding at (0,2,1); these
+   selectors sit at (0,2,3) so the ink frame keeps even gutters. */
+html[data-dsh-ink] table th:first-child,
+html[data-dsh-ink] table td:first-child {
+  border-left: 0;
+  padding-left: 15px;
+}
+
+html[data-dsh-ink] table th:last-child,
+html[data-dsh-ink] table td:last-child {
+  border-right: 0;
+  padding-right: 15px;
+}
+
+html[data-dsh-ink] table th+th,
+html[data-dsh-ink] table td+td {
+  border-left: 1px solid var(--ip-line-soft);
+}
+
+html[data-dsh-ink] kbd {
+  background-color: var(--ip-paper-hi);
+  border: 1px solid var(--ip-line);
+  border-bottom-width: 3px;
+  border-radius: 3px;
+  padding: 0 5px;
+  font-family: var(--ip-font-mono);
+  font-size: 0.86em;
+}
+
+html[data-dsh-ink] hr {
+  border: 0;
+  border-top: 2px dashed var(--ip-line-mid);
+  margin: 18px 0;
+}
